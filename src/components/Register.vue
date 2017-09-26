@@ -1,14 +1,16 @@
 <template>
 <div>
     <template>
-        <v-stepper v-model="el">
+        <v-stepper v-model="step">
             <v-stepper-header>
-                    <v-stepper-step v-for="(step, i) in steps" :step="step.index" :complete="el > step.index"></v-stepper-step>
-                    <!--
-                    <v-divider></v-divider>
-                    -->
+                <template v-for="(step, i) in filteredSteps">
+                    <v-stepper-step :step="step.name" :complete="stepIndex > i">
+                        <small></small>
+                    </v-stepper-step>
+                    <v-divider v-if="i < filteredSteps.length - 1"></v-divider>
+                </template>
             </v-stepper-header>
-            <v-stepper-content v-for="(step, i) in steps" :step="step.index">
+            <v-stepper-content v-for="(step, i) in filteredSteps" :step="step.name">
                 <v-card flat>
                     <v-card-title primary-title>
                         <div>
@@ -16,17 +18,17 @@
                             <span class="grey--text">{{step.subtitle}}</span>
                         </div>
                     </v-card-title>
-                    <v-card-text v-if="step.index == 1">
-                        <v-radio-group v-model="drunk">
-                            <v-radio color="red" label="是" value="1"></v-radio>
-                            <v-radio color="red" label="否" value="0"></v-radio>
+                    <v-card-text v-if="step.name == 1">
+                        <v-radio-group v-model="suspect.drunk">
+                            <v-radio color="red" label="是" :value="1"></v-radio>
+                            <v-radio color="red" label="否" :value="0"></v-radio>
                         </v-radio-group>
                     </v-card-text>
-                    <v-card-text v-if="step.index == 2">
+                    <v-card-text v-if="step.name == 2">
                         <v-container fluid grid-list-md>
                             <v-layout row>
                                 <v-flex xs12>
-                                    <v-text-field required name="file.description" label="案由" value="" required></v-text-field>
+                                    <v-text-field required name="file.description" label="案由" v-model="file.description" required></v-text-field>
                                 </v-flex>
                             </v-layout>
                             <v-layout row>
@@ -68,7 +70,7 @@
                             </v-layout>
                         </v-container>
                     </v-card-text>
-                    <v-card-text v-if="step.index == 3">
+                    <v-card-text v-if="step.name == 3">
                         <v-container fluid grid-list-md>
                             <v-layout row>
                                 <v-flex xs6>
@@ -86,7 +88,7 @@
                             </v-layout>
                         </v-container>
                     </v-card-text>
-                    <v-card-text v-if="step.index == 4">
+                    <v-card-text v-if="step.name == 4">
                         <v-container fluid grid-list-md>
                             <v-layout row>
                                 <v-checkbox label="是否有寄存物品" v-model="hasBelongings"></v-checkbox>
@@ -104,7 +106,7 @@
                             </v-layout>
                         </v-container>
                     </v-card-text>
-                    <v-card-text v-if="step.index == 5">
+                    <v-card-text v-if="step.name == 5">
                         <v-container fluid grid-list-md>
                             <v-layout row>
                                 <v-checkbox label="已经完成人身安全检查" v-model="suspect.physicalChecked"></v-checkbox>
@@ -116,7 +118,7 @@
                             </v-layout>
                         </v-container>
                     </v-card-text>
-                    <v-card-text v-if="step.index == 6">
+                    <v-card-text v-if="step.name == 6">
                         <v-container fluid grid-list-md>
                             <v-layout row>
                                 <v-checkbox label="已经完成信息采集" v-model="suspect.infoCollected"></v-checkbox>
@@ -128,7 +130,7 @@
                             </v-layout>
                         </v-container>
                     </v-card-text>
-                    <v-card-text v-if="step.index == 7">
+                    <v-card-text v-if="step.name == 7">
                         <v-container fluid grid-list-md>
                             <v-layout row>
                                 <v-flex xs12>
@@ -140,7 +142,7 @@
                             </v-layout>
                         </v-container>
                     </v-card-text>
-                    <v-card-text v-if="step.index == 8">
+                    <v-card-text v-if="step.name == 8">
                         <v-container fluid grid-list-md>
                             <v-layout row>
                                 <v-flex xs4>
@@ -150,9 +152,9 @@
                         </v-container>
                     </v-card-text>
                 </v-card>
-                <v-btn v-if="(i + 1) != steps.length" primary @click.native="el = step.index + 1">下一步</v-btn>
+                <v-btn v-if="stepIndex < filteredSteps.length - 1" primary @click="next">下一步</v-btn>
                 <v-btn v-else primary @click="done">完成</v-btn>
-                <v-btn v-if="i != 0" flat @click.native="el = step.index - 1">上一步</v-btn>
+                <v-btn v-if="stepIndex != 0" flat @click="prev">上一步</v-btn>
             </v-stepper-content>
         </v-stepper>
     </template>
@@ -164,16 +166,17 @@ export default {
   name: 'register',
   data () {
     return {
-      el: 1,
+      stepIndex: 0,
+      step: '1',
       steps: [
-        {index: 1, title: '醉酒状态确认', subtitle: '请仔细确认犯罪嫌疑人是否醉酒'},
-        {index: 2, title: '案件信息登记', subtitle: '请仔细填写案件信息'},
-        {index: 3, title: '犯罪嫌疑人信息登记', subtitle: '请仔细填写犯罪嫌疑人信息'},
-        {index: 4, title: '个人物品寄存', subtitle: '...'},
-        {index: 5, title: '人身安全检查', subtitle: '...'},
-        {index: 6, title: '嫌疑人信息采集', subtitle: '...'},
-        {index: 7, title: '标签绑定及穿戴识别服', subtitle: '请仔细核对标签并给犯罪嫌疑人穿上警示识别服...'},
-        {index: 8, title: '待候问', subtitle: '请负责民警或工作人员将犯罪嫌疑人带入指定房间候问...'}
+        {name: 1, title: '醉酒状态确认', subtitle: '请仔细确认犯罪嫌疑人是否醉酒', rules: []},
+        {name: 2, title: '案件信息登记', subtitle: '请仔细填写案件信息', rules: [() => { return this.file.description !== '' }]},
+        {name: 3, title: '犯罪嫌疑人信息登记', subtitle: '请仔细填写犯罪嫌疑人信息'},
+        {name: 4, title: '个人物品寄存', subtitle: '...'},
+        {name: 5, title: '人身安全检查', subtitle: '...'},
+        {name: 6, title: '嫌疑人信息采集', subtitle: '...'},
+        {name: 7, title: '标签绑定及穿戴识别服', subtitle: '请仔细核对标签并给犯罪嫌疑人穿上警示识别服...'},
+        {name: 8, title: '待候问', subtitle: '请负责民警或工作人员将犯罪嫌疑人带入指定房间候问...'}
       ],
       file: {
         type: 0,
@@ -183,6 +186,7 @@ export default {
         registeredBy: 1
       },
       suspect: {
+        drunk: 0,
         name: '',
         sex: 1,
         nationality: 1,
@@ -230,11 +234,18 @@ export default {
       ROOMS: [
         {value: 1, text: '讯询问室'},
         {value: 2, text: '等候室'}
-      ],
-      drunk: 0
+      ]
     }
   },
   computed: {
+    filteredSteps: function () {
+      console.log('***', this.suspect.drunk)
+      if (Number(this.suspect.drunk) === 0) {
+        return this.steps
+      } else {
+        return [this.steps[0], this.steps[7]]
+      }
+    },
     hasBelongings: {
       get: function () {
         return this.suspect.belongings
@@ -249,9 +260,24 @@ export default {
     }
   },
   methods: {
+    prev: function () {
+      let min = 0
+      if (--this.stepIndex < min) {
+        this.stepIndex = min
+      }
+      this.step = this.filteredSteps[this.stepIndex].name
+      console.log('prev:', this.stepIndex, this.step)
+    },
+    next: function () {
+      let max = this.filteredSteps.length - 1
+      if (++this.stepIndex > max) {
+        this.stepIndex = max
+      }
+      this.step = this.filteredSteps[this.stepIndex].name
+      console.log('next:', this.stepIndex, this.step)
+    },
     done: function () {
-      console.log('done')
-      alert('done')
+      this.$router.push({path: '/suspects'})
     }
   }
 }
