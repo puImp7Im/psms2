@@ -38,8 +38,11 @@ export default {
     return {
       drawer: null,
       items: [
-        { title: '入所登记', icon: 'dashboard', action: 'register' },
-        { title: '讯询问', icon: 'dashboard', action: 'hello' }
+        { title: '入所登记', icon: 'group_add', action: '/register' },
+        { title: '讯/询问', icon: 'group', action: '/suspects/1' },
+        { title: '临时出所', icon: 'people_outline', action: '/suspects/3' },
+        { title: '出所', icon: 'time_to_leave', action: '/suspects/2' },
+        { title: '嫌疑人列表', icon: 'dashboard', action: '/suspects/2' }
       ]
     }
   }
