@@ -1,6 +1,6 @@
-# psms2
+# PSMS
 
-> A Vue.js project
+> PSMS prototype v2.1
 
 ## Build Setup
 
