@@ -229,7 +229,8 @@ export default {
       ],
       OFFICERS: [
         {value: 1, text: '杨珺岳'},
-        {value: 2, text: '张鑫钰'}
+        {value: 2, text: '张鑫钰'},
+        {value: 3, text: '毛智斌'}
       ],
       ROOMS: [
         {value: 1, text: '讯询问室'},
