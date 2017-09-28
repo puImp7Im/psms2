@@ -1,5 +1,6 @@
 [
   {"name": "陈小二", "sex": 1, "status": 1, "nationality": 1, "registeredOn": 1512832321000},
   {"name": "李二狗", "sex": 1, "status": 2, "registeredOn": 1512832321000},
-  {"name": "刘老三", "sex": 1, "status": 2, "registeredOn": 1512832321000}
+  {"name": "刘老三", "sex": 1, "status": 2, "registeredOn": 1512832321000},
+  {"name": "西门庆", "sex": 1, "status": 3, "registeredOn": 1512832321000}
 ]

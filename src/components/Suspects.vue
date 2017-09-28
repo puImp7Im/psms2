@@ -6,6 +6,7 @@
           selected-key="name"
           hide-actions
           class="elevation-1"
+          @input="change"
         >
         <template slot="items" scope="props">
         <td class="text-xs-center">
@@ -52,10 +53,10 @@ export default {
     }
   },
   beforeRouteEnter (to, from, next) {
-    console.log('loading data')
     next(vm => {
+      console.log('loadding data..')
       vm.$http.get('/static/suspects.json').then(response => {
-        console.log('done')
+        console.log('loaded.')
         vm.items = response.body
       })
     })
@@ -100,10 +101,10 @@ export default {
   },
   methods: {
     change: function (b) {
-      console.log('***', b)
-      if (b) {
+      while (this.selected.length > 1) {
         this.selected.shift()
       }
+      this.selected.push(b.pop())
     }
   },
   computed: {
@@ -112,11 +113,6 @@ export default {
       return this.items.filter(function (i) {
         return i.status === Number(search)
       })
-    }
-  },
-  watch: {
-    selected: function (o, n) {
-
     }
   }
 }

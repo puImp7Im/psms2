@@ -10,7 +10,7 @@
                     <v-divider v-if="i < filteredSteps.length - 1"></v-divider>
                 </template>
             </v-stepper-header>
-            <v-stepper-content v-for="(step, i) in filteredSteps" :step="step.name">
+            <v-stepper-content v-for="(step, i) in filteredSteps" :step="step.name" :key="step.name">
                 <v-card flat>
                     <v-card-title primary-title>
                         <div>
