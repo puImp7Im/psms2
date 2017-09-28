@@ -48,32 +48,39 @@ export default {
         {text: '登记时间', align: 'center', sortable: false, value: 'registeredOn'},
         {text: '入所时间', align: 'center', sortable: false, value: 'duration'}
       ],
-      items: [
-        {name: '陈小二', sex: 1, status: 1, nationality: 1, registeredOn: new Date(new Date().getTime() - Math.random() * 24 * 3600 * 1000)},
-        {name: '李二狗', sex: 0, status: 2, registeredOn: new Date(new Date().getTime() - Math.random() * 24 * 3600 * 1000)}
-      ]
+      items: []
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    console.log('loading data')
+    next(vm => {
+      vm.$http.get('/static/suspects.json').then(response => {
+        console.log('done')
+        vm.items = response.body
+      })
+    })
   },
   filters: {
     statusName: function (i) {
       return {1: 'a', 2: 'b', 3: 'c'}[i]
     },
-    dateFormat: function (i, str) {
-      const d = {
-        Y: i.getFullYear(),
-        y: i.getFullYear(),
-        M: i.getMonth() + 1,
-        d: i.getDate(),
-        H: i.getHours(),
-        h: i.getHours() % 12,
-        m: i.getMinutes(),
-        s: i.getSeconds(),
-        S: i.getMilliseconds()
+    dateFormat: function (n, str) {
+      let date = new Date(n)
+      const FORMAT = {
+        Y: date.getFullYear(),
+        y: date.getFullYear(),
+        M: date.getMonth() + 1,
+        d: date.getDate(),
+        H: date.getHours(),
+        h: date.getHours() % 12,
+        m: date.getMinutes(),
+        s: date.getSeconds(),
+        S: date.getMilliseconds()
       }
-      for (let k in d) {
+      for (let k in FORMAT) {
         var re = new RegExp('(' + k + '+' + ')')
         while ((re.exec(str)) != null) {
-          var v = d[k].toString(10)
+          var v = FORMAT[k].toString(10)
           while (v.length < RegExp.$1.length) {
             v = '0'.concat(v)
           }
@@ -84,7 +91,7 @@ export default {
     },
     caculate: function (i) {
       let now = new Date()
-      let sec = Math.round((now.getTime() - i.getTime()) / 1000)
+      let sec = Math.round((now.getTime() - i) / 1000)
       let h = 3600
       let m = 60
       let str = Math.round(sec / h) + 'h, ' + Math.round((sec % h) / m) + 'm'

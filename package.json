@@ -14,6 +14,16 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
+    "accepts": "^1.3.4",
+    "array-flatten": "^2.1.1",
+    "content-disposition": "^0.5.2",
+    "encodeurl": "^1.0.1",
+    "escape-html": "^1.0.3",
+    "media-typer": "^0.3.0",
+    "merge-descriptors": "^1.0.1",
+    "methods": "^1.1.2",
+    "proxy-addr": "^2.0.2",
+    "send": "^0.16.0",
     "vue": "^2.4.2",
     "vue-router": "^2.7.0",
     "vuetify": "^0.15.7"
