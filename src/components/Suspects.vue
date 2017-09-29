@@ -19,7 +19,7 @@
           <td class="text-xs-center">{{ props.item.name }}</td>
           <td class="text-xs-center">{{ props.item.sex }}</td>
           <td class="text-xs-center">{{ props.item.status | statusName }}</td>
-          <td class="text-xs-center">{{ props.item.registeredOn | dateFormat('yyyy-MM-dd HH:mm:ss') }}</td>
+          <td class="text-xs-center">{{ props.item.registeredOn | formatDate }}</td>
           <td class="text-xs-center">{{ props.item.registeredOn | caculate }}</td>
         </template>
     </v-data-table>
@@ -64,31 +64,6 @@ export default {
   filters: {
     statusName: function (i) {
       return {1: 'a', 2: 'b', 3: 'c'}[i]
-    },
-    dateFormat: function (n, str) {
-      let date = new Date(n)
-      const FORMAT = {
-        Y: date.getFullYear(),
-        y: date.getFullYear(),
-        M: date.getMonth() + 1,
-        d: date.getDate(),
-        H: date.getHours(),
-        h: date.getHours() % 12,
-        m: date.getMinutes(),
-        s: date.getSeconds(),
-        S: date.getMilliseconds()
-      }
-      for (let k in FORMAT) {
-        var re = new RegExp('(' + k + '+' + ')')
-        while ((re.exec(str)) != null) {
-          var v = FORMAT[k].toString(10)
-          while (v.length < RegExp.$1.length) {
-            v = '0'.concat(v)
-          }
-          str = str.replace(RegExp.$1, v)
-        }
-      }
-      return str
     },
     caculate: function (i) {
       let now = new Date()

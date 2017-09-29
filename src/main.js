@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import Vuetify from 'vuetify'
 import VueResource from 'vue-resource'
+import dateformat from 'dateformat'
 
 Vue.config.productionTip = false
 
@@ -16,4 +17,9 @@ new Vue({
   router,
   template: '<App/>',
   components: { App }
+})
+
+Vue.filter('formatDate', function (ts, str = 'yyyy-MM-dd hh:mm:ss') {
+  let date = new Date(ts)
+  return dateformat(date, str)
 })
