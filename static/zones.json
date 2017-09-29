@@ -1,0 +1,4 @@
+[
+  {"id": 1, "name": "ground", "layer": 1, "points": []},
+  {"id": 2, "name": "floor", "layer": 2, "points": []}
+]
